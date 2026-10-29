@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Test: Ökosysteme, Nahrungsbeziehungen, Fotosynthese, Blattaufbau</title>
+<style>
+  @page { size: A4; margin: 16mm; }
+  *{box-sizing:border-box;}
+  body{font-family:"Segoe UI",Verdana,Arial,sans-serif;color:#1f1f1b;line-height:1.5;max-width:800px;margin:0 auto;padding:1.5rem 1.25rem 4rem;}
+  h1{font-size:1.3rem;margin:0 0 .2rem;}
+  .unter{color:#555;font-size:.9rem;margin:0 0 1rem;}
+  .kopfdaten{display:flex;gap:1.5rem;flex-wrap:wrap;border:1px solid #ccc;border-radius:8px;padding:.7rem 1rem;margin-bottom:1.3rem;font-size:.92rem;}
+  .kopfdaten span{display:inline-block;border-bottom:1px solid #999;min-width:140px;}
+  .hinweisbox{background:#fff8e1;border-left:4px solid #e0a800;border-radius:6px;padding:.7rem .9rem;font-size:.9rem;margin-bottom:1.5rem;}
+  .abschnitt{border-top:2px solid #1f1f1b;padding-top:.8rem;margin-top:1.6rem;}
+  .abschnitt h2{font-size:1.05rem;margin:0 0 .2rem;}
+  .abschnitt .punkte{font-size:.82rem;color:#555;font-weight:400;}
+  .aufgabe{margin:.9rem 0 1.1rem;}
+  .aufgabe-nr{font-weight:700;}
+  .linie{display:inline-block;border-bottom:1px solid #999;min-width:90%;height:1.3em;}
+  .zeilen .zeile{border-bottom:1px solid #999;height:1.6em;margin:.3rem 0;}
+  .kreuzfeld{display:inline-flex;align-items:center;gap:.3rem;margin-right:1.2rem;}
+  .kaestchen{display:inline-block;width:14px;height:14px;border:1.5px solid #1f1f1b;vertical-align:middle;}
+  .wortbank{background:#f3f2ec;border:1px dashed #999;border-radius:6px;padding:.5rem .8rem;font-size:.88rem;margin:.5rem 0;}
+  .kette{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;margin:.7rem 0;}
+  .kette .box{border:1.5px solid #1f1f1b;border-radius:6px;padding:.5rem .7rem;min-width:120px;min-height:2.4em;text-align:center;font-size:.85rem;}
+  .kette .pfeil{font-size:1.2rem;}
+  svg{max-width:100%;height:auto;}
+  .no-print{margin:.4rem 0;}
+  .no-print button{background:#1f1f1b;color:#fff;border:none;padding:.5rem 1rem;border-radius:999px;cursor:pointer;font-size:.88rem;}
+  .loesungen{display:none;background:#eaf3ea;border:1px dashed #3f7d4a;border-radius:8px;padding:.8rem 1rem;margin-top:.5rem;font-size:.88rem;}
+  .loesungen.sichtbar{display:block;}
+  .loesungen h3{margin:0 0 .4rem;font-size:.9rem;color:#2f6238;}
+  @media print{
+    .no-print, .loesungen{ display:none !important; }
+    body{padding:0;}
+  }
+</style>
+</head>
+<body>
+
+<h1>Test: Ökosysteme, Nahrungsbeziehungen, Fotosynthese, Blattaufbau</h1>
+<p class="unter">Biologie Klasse 8 · Bearbeitungszeit ca. 15–20 Minuten · Bitte handschriftlich ausfüllen</p>
+
+<div class="kopfdaten">
+  <span>Name: <span style="display:inline-block;min-width:160px;">&nbsp;</span></span>
+  <span>Klasse: <span style="display:inline-block;min-width:80px;">&nbsp;</span></span>
+  <span>Datum: <span style="display:inline-block;min-width:100px;">&nbsp;</span></span>
+</div>
+
+<div class="hinweisbox">
+  Beantworte alle Aufgaben in ganzen Sätzen, wo danach gefragt ist. Wenn dir ein Begriff nicht einfällt, lies dir die Frage noch einmal in Ruhe durch – die Antwort steckt oft schon in der Aufgabenstellung.
+</div>
+
+<div class="no-print">
+  <button onclick="document.body.classList.toggle('loesungen-an'); document.querySelectorAll('.loesungen').forEach(function(l){l.classList.toggle('sichtbar');})">Lösungen anzeigen / ausblenden (nur am Bildschirm, wird nicht mitgedruckt)</button>
+</div>
+
+<!-- ABSCHNITT A -->
+<div class="abschnitt">
+  <h2>A &nbsp;Ökosysteme <span class="punkte">(ca. 4 Minuten)</span></h2>
+
+  <div class="aufgabe">
+    <p><span class="aufgabe-nr">A1.</span> Erkläre die Begriffe <strong>Biotop</strong> und <strong>Biozönose</strong> jeweils in einem Satz.</p>
+    <div class="zeilen"><div class="zeile"></div><div class="zeile"></div></div>
+  </div>
+
+  <div class="aufgabe">
+    <p><span class="aufgabe-nr">A2.</span> Nenne je zwei abiotische und zwei biotische Umweltfaktoren.</p>
+    <p>Abiotisch: <span class="linie"></span></p>
+    <p>Biotisch: <span class="linie"></span></p>
+  </div>
+
+  <div class="aufgabe">
+    <p><span class="aufgabe-nr">A3.</span> Kreuze an: richtig oder falsch?</p>
+    <p>„Eine Wiese entwickelt sich ohne Mähen von selbst zu einem Wald."
+      <span class="kreuzfeld"><span class="kaestchen"></span> richtig</span>
+      <span class="kreuzfeld"><span class="kaestchen"></span> falsch</span>
+    </p>
+    <p>„Fressfeinde und Nahrungskonkurrenten sind abiotische Faktoren."
+      <span class="kreuzfeld"><span class="kaestchen"></span> richtig</span>
+      <span class="kreuzfeld"><span class="kaestchen"></span> falsch</span>
+    </p>
+  </div>
+
+  <div class="loesungen">
+    <h3>Erwartete Antworten A</h3>
+    <p>A1: Biotop = unbelebter Lebensraum mit seinen abiotischen Faktoren. Biozönose = Gesamtheit aller Lebewesen, die in einem Biotop zusammenleben.<br>
+    A2: z.&nbsp;B. abiotisch: Wasser, Temperatur, Klima, Boden, Licht. Biotisch: Nahrung, Fressfeinde, Konkurrenten, Krankheitserreger.<br>
+    A3: falsch (ohne Mähen entsteht mit der Zeit ein Wald) / falsch (das sind biotische Faktoren).</p>
+  </div>
+</div>
+
+<!-- ABSCHNITT B -->
+<div class="abschnitt">
+  <h2>B &nbsp;Nahrungsbeziehungen <span class="punkte">(ca. 4 Minuten)</span></h2>
+
+  <div class="aufgabe">
+    <p><span class="aufgabe-nr">B1.</span> Bringe die folgenden Begriffe in die richtige Reihenfolge einer Nahrungskette und trage sie in die Kästchen ein:</p>
+    <div class="wortbank">Sperber &nbsp;·&nbsp; Eichenblatt &nbsp;·&nbsp; Kohlmeise &nbsp;·&nbsp; Eichenwicklerraupe</div>
+    <div class="kette">
+      <div class="box">&nbsp;</div><span class="pfeil">→</span>
+      <div class="box">&nbsp;</div><span class="pfeil">→</span>
+      <div class="box">&nbsp;</div><span class="pfeil">→</span>
+      <div class="box">&nbsp;</div>
+    </div>
+  </div>
+
+  <div class="aufgabe">
+    <p><span class="aufgabe-nr">B2.</span> Was ist der Unterschied zwischen einer Nahrungskette und einem Nahrungsnetz?</p>
+    <div class="zeilen"><div class="zeile"></div><div class="zeile"></div></div>
+  </div>
+
+  <div class="aufgabe">
+    <p><span class="aufgabe-nr">B3.</span> Ordne zu: Produzent oder Konsument?</p>
+    <p>Eine Eiche ist ein <span class="linie" style="min-width:160px;"></span></p>
+    <p>Ein Fuchs ist ein <span class="linie" style="min-width:160px;"></span></p>
+  </div>
+
+  <div class="loesungen">
+    <h3>Erwartete Antworten B</h3>
+    <p>B1: Eichenblatt → Eichenwicklerraupe → Kohlmeise → Sperber.<br>
+    B2: Eine Nahrungskette zeigt eine einzelne Abfolge von Fressbeziehungen. Ein Nahrungsnetz verbindet mehrere Nahrungsketten eines Ökosystems miteinander und macht es dadurch stabiler.<br>
+    B3: Eiche = Produzent. Fuchs = Konsument.</p>
+  </div>
+</div>
+
+<!-- ABSCHNITT C -->
+<div class="abschnitt">
+  <h2>C &nbsp;Fotosynthese <span class="punkte">(ca. 4–5 Minuten)</span></h2>
+
+  <div class="aufgabe">
+    <p><span class="aufgabe-nr">C1.</span> Vervollständige die Wortgleichung der Fotosynthese. Nutze die Wortbank.</p>
+    <div class="wortbank">Wasser &nbsp;·&nbsp; Kohlenstoffdioxid &nbsp;·&nbsp; Glucose &nbsp;·&nbsp; Sauerstoff</div>
+    <p style="text-align:center;font-size:1.05rem;margin-top:.8rem;">
+      <span class="linie" style="min-width:150px;"></span> &nbsp;+&nbsp; <span class="linie" style="min-width:150px;"></span>
+      &nbsp;—[Licht]→&nbsp;
+      <span class="linie" style="min-width:150px;"></span> &nbsp;+&nbsp; <span class="linie" style="min-width:150px;"></span>
+    </p>
+  </div>
+
+  <div class="aufgabe">
+    <p><span class="aufgabe-nr">C2.</span> Nenne zwei Bedingungen, die die Fotosyntheserate einer Pflanze beeinflussen.</p>
+    <div class="zeilen"><div class="zeile"></div></div>
+  </div>
+
+  <div class="aufgabe">
+    <p><span class="aufgabe-nr">C3.</span> Erkläre in ein bis zwei Sätzen, warum man grüne Pflanzen „autotroph" nennt.</p>
+    <div class="zeilen"><div class="zeile"></div><div class="zeile"></div></div>
+  </div>
+
+  <div class="loesungen">
+    <h3>Erwartete Antworten C</h3>
+    <p>C1: Wasser + Kohlenstoffdioxid —[Licht]→ Glucose + Sauerstoff.<br>
+    C2: z.&nbsp;B. Lichtmenge, Wasserversorgung, Kohlenstoffdioxid-Angebot, Temperatur.<br>
+    C3: Grüne Pflanzen stellen die Nährstoffe, die sie zum Leben brauchen, mithilfe von Lichtenergie selbst her und nehmen dafür keine Nahrung auf.</p>
+  </div>
+</div>
+
+<!-- ABSCHNITT D -->
+<div class="abschnitt">
+  <h2>D &nbsp;Der Aufbau des Blattes <span class="punkte">(ca. 4–5 Minuten)</span></h2>
+
+  <div class="aufgabe">
+    <p><span class="aufgabe-nr">D1.</span> Beschrifte die Abbildung mit den passenden Fachbegriffen aus der Wortbank. Schreibe die Nummern 1–6 mit dem jeweiligen Begriff unten in die Liste.</p>
+    <div class="wortbank">Palisadengewebe &nbsp;·&nbsp; untere Epidermis mit Spaltöffnungen &nbsp;·&nbsp; Kutikula &nbsp;·&nbsp; Leitungsgewebe &nbsp;·&nbsp; Schwammgewebe &nbsp;·&nbsp; obere Epidermis</div>
+
+    <svg viewBox="0 0 560 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Schematischer Blattquerschnitt zum Beschriften">
+      <!-- Blattblock -->
+      <rect x="40" y="15" width="300" height="10" fill="#cfe3cf" stroke="#1f1f1b"/>
+      <rect x="40" y="25" width="300" height="25" fill="#e7f0e2" stroke="#1f1f1b"/>
+      <g>
+        <rect x="40" y="50" width="300" height="55" fill="#d9ecd3" stroke="#1f1f1b"/>
+        <line x1="70" y1="50" x2="70" y2="105" stroke="#8fae7a"/>
+        <line x1="100" y1="50" x2="100" y2="105" stroke="#8fae7a"/>
+        <line x1="130" y1="50" x2="130" y2="105" stroke="#8fae7a"/>
+        <line x1="160" y1="50" x2="160" y2="105" stroke="#8fae7a"/>
+        <line x1="190" y1="50" x2="190" y2="105" stroke="#8fae7a"/>
+        <line x1="220" y1="50" x2="220" y2="105" stroke="#8fae7a"/>
+        <line x1="250" y1="50" x2="250" y2="105" stroke="#8fae7a"/>
+        <line x1="280" y1="50" x2="280" y2="105" stroke="#8fae7a"/>
+        <line x1="310" y1="50" x2="310" y2="105" stroke="#8fae7a"/>
+      </g>
+      <rect x="40" y="105" width="300" height="55" fill="#eef5ea" stroke="#1f1f1b"/>
+      <circle cx="80" cy="130" r="9" fill="#fff" stroke="#8fae7a"/>
+      <circle cx="140" cy="135" r="10" fill="#fff" stroke="#8fae7a"/>
+      <circle cx="210" cy="128" r="8" fill="#fff" stroke="#8fae7a"/>
+      <circle cx="270" cy="134" r="10" fill="#fff" stroke="#8fae7a"/>
+      <circle cx="310" cy="125" r="7" fill="#fff" stroke="#8fae7a"/>
+      <rect x="40" y="160" width="300" height="18" fill="#cfe3cf" stroke="#1f1f1b"/>
+      <!-- Spaltöffnungen -->
+      <circle cx="90" cy="169" r="3" fill="#fff" stroke="#1f1f1b"/>
+      <circle cx="200" cy="169" r="3" fill="#fff" stroke="#1f1f1b"/>
+      <circle cx="300" cy="169" r="3" fill="#fff" stroke="#1f1f1b"/>
+      <!-- Leitungsgewebe (Blattader) -->
+      <ellipse cx="170" cy="80" rx="22" ry="25" fill="#dfeef7" stroke="#1f1f1b"/>
+
+      <!-- Nummern + Zeiger -->
+      <line x1="340" y1="20" x2="400" y2="20" stroke="#1f1f1b"/>
+      <circle cx="410" cy="20" r="11" fill="#fff" stroke="#1f1f1b"/><text x="410" y="24" text-anchor="middle" font-size="12">1</text>
+
+      <line x1="340" y1="37" x2="400" y2="45" stroke="#1f1f1b"/>
+      <circle cx="410" cy="48" r="11" fill="#fff" stroke="#1f1f1b"/><text x="410" y="52" text-anchor="middle" font-size="12">2</text>
+
+      <line x1="192" y1="80" x2="192" y2="80" stroke="#1f1f1b"/>
+      <line x1="340" y1="70" x2="400" y2="76" stroke="#1f1f1b"/>
+      <circle cx="410" cy="79" r="11" fill="#fff" stroke="#1f1f1b"/><text x="410" y="83" text-anchor="middle" font-size="12">3</text>
+
+      <line x1="340" y1="130" x2="400" y2="110" stroke="#1f1f1b"/>
+      <circle cx="410" cy="107" r="11" fill="#fff" stroke="#1f1f1b"/><text x="410" y="111" text-anchor="middle" font-size="12">4</text>
+
+      <line x1="340" y1="169" x2="400" y2="140" stroke="#1f1f1b"/>
+      <circle cx="410" cy="137" r="11" fill="#fff" stroke="#1f1f1b"/><text x="410" y="141" text-anchor="middle" font-size="12">5</text>
+
+      <line x1="192" y1="55" x2="230" y2="25" stroke="#1f1f1b"/>
+      <circle cx="240" cy="18" r="11" fill="#fff" stroke="#1f1f1b"/><text x="240" y="22" text-anchor="middle" font-size="12">6</text>
+    </svg>
+
+    <div class="zeilen">
+      <p>1: <span class="linie" style="min-width:60%;"></span></p>
+      <p>2: <span class="linie" style="min-width:60%;"></span></p>
+      <p>3: <span class="linie" style="min-width:60%;"></span></p>
+      <p>4: <span class="linie" style="min-width:60%;"></span></p>
+      <p>5: <span class="linie" style="min-width:60%;"></span></p>
+      <p>6: <span class="linie" style="min-width:60%;"></span></p>
+    </div>
+  </div>
+
+  <div class="aufgabe">
+    <p><span class="aufgabe-nr">D2.</span> Erkläre die Funktion der Spaltöffnungen in ein bis zwei Sätzen.</p>
+    <div class="zeilen"><div class="zeile"></div><div class="zeile"></div></div>
+  </div>
+
+  <div class="loesungen">
+    <h3>Erwartete Antworten D</h3>
+    <p>D1: 1 Kutikula, 2 obere Epidermis, 3 Palisadengewebe, 4 Schwammgewebe, 5 untere Epidermis mit Spaltöffnungen, 6 Leitungsgewebe.<br>
+    D2: Über die Spaltöffnungen verdunstet Wasser, wodurch ein Sog entsteht, der Wasser aus der Wurzel in die Blätter zieht. Außerdem findet hier der Gasaustausch (Kohlenstoffdioxid/Sauerstoff) statt. Bei Hitze oder Trockenheit schließen sie sich, um die Pflanze vor dem Austrocknen zu schützen.</p>
+  </div>
+</div>
+
+<p style="margin-top:2.5rem;font-size:.8rem;color:#777;">Viel Erfolg!</p>
+
+</body>
+</html>

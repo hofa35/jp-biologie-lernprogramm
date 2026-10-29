@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Das Lernprogramm für Jan Philipp – Biologie 8</title>
+<style>
+:root{
+  --bg:#f7f5ef; --card:#ffffff; --text:#2b2b26; --muted:#6b6b63; --line:#e4e0d4;
+  --m1:#3f7d4a; --m1-bg:#eaf3ea;
+  --m2:#c1662f; --m2-bg:#fbeee3;
+  --m3:#7a9a1f; --m3-bg:#f1f6e2;
+  --m4:#2f8f7a; --m4-bg:#e4f4f0;
+  --m5:#4a6fa5; --m5-bg:#e8eef6;
+  --radius:16px; --shadow:0 2px 10px rgba(0,0,0,.07);
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"Segoe UI",Verdana,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;}
+h1,h2,h3,h4{line-height:1.25;}
+a{color:inherit;}
+.kopf{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;}
+.kopf-innen{max-width:900px;margin:0 auto;padding:.9rem 1.25rem .4rem;}
+.kopf-titel{font-size:1.05rem;font-weight:700;margin:0;}
+.kopf-unter{font-size:.82rem;color:var(--muted);margin:.15rem 0 .7rem;}
+.tabs{max-width:900px;margin:0 auto;display:flex;gap:.5rem;overflow-x:auto;padding:0 1.25rem .8rem;}
+.tab{border:none;background:#f1efe6;color:var(--text);padding:.5rem 1rem;border-radius:999px;font-size:.88rem;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:.35rem;font-family:inherit;}
+.tab[aria-selected="true"]{background:var(--text);color:#fff;}
+.tab .haken{color:#5fd68a;font-weight:700;}
+.ansicht{display:none;max-width:900px;margin:0 auto;padding:1.5rem 1.25rem 3.5rem;}
+.ansicht.aktiv{display:block;}
+
+/* Start */
+.start-intro{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:1.4rem 1.6rem;box-shadow:var(--shadow);}
+.start-kopfbild{display:flex;gap:1.2rem;align-items:center;flex-wrap:wrap;margin-bottom:.4rem;}
+.start-kopfbild img{width:150px;height:auto;flex:0 0 auto;}
+.start-kopfbild .start-kopfbild-text{flex:1 1 260px;}
+.start-kopfbild h1{margin:0 0 .4rem;}
+.fortschritt-leiste{height:9px;background:#e4e0d4;border-radius:999px;overflow:hidden;margin:1rem 0 .4rem;}
+.fortschritt-fuellung{height:100%;background:#3f7d4a;width:0%;transition:width .4s;}
+.fortschritt-label{font-size:.85rem;color:var(--muted);}
+.anleitung{margin-top:1rem;padding:.9rem 1.1rem;background:#fff8e1;border-left:5px solid #e0a800;border-radius:10px;font-size:.93rem;}
+.modul-karten{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;margin-top:1.6rem;}
+.modul-karte{border-radius:var(--radius);padding:1.3rem 1.4rem;cursor:pointer;border:none;text-align:left;color:#fff;box-shadow:var(--shadow);font-family:inherit;display:block;width:100%;}
+.modul-karte .modul-karte-kicker{font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;opacity:.85;}
+.modul-karte .modul-karte-titel{font-size:1.15rem;font-weight:700;margin:.3rem 0 .4rem;}
+.modul-karte .modul-karte-status{font-size:.85rem;opacity:.95;}
+.modul-karte.modul-fertig{outline:3px solid rgba(255,255,255,.7);}
+.karte-m1{background:linear-gradient(135deg,#3f7d4a,#5a9e63);}
+.karte-m2{background:linear-gradient(135deg,#c1662f,#d98a51);}
+.karte-m3{background:linear-gradient(135deg,#7a9a1f,#9cbc3c);}
+.karte-m4{background:linear-gradient(135deg,#2f8f7a,#4bb09a);}
+.karte-m5{background:linear-gradient(135deg,#4a6fa5,#7391c4);}
+.test-karte{margin-top:1.3rem;background:#2b2b26;color:#fff;border-radius:var(--radius);padding:1.3rem 1.5rem;box-shadow:var(--shadow);}
+.test-karte a{display:inline-block;margin-top:.6rem;background:#fff;color:#2b2b26;padding:.6rem 1.1rem;border-radius:999px;text-decoration:none;font-weight:700;font-size:.9rem;}
+
+/* Modul-Inhalte */
+.modul-kopf{background:var(--mc-bg);border-radius:var(--radius);padding:1.3rem 1.5rem;margin-bottom:1.4rem;}
+.modul-kicker{text-transform:uppercase;letter-spacing:.08em;font-size:.75rem;color:var(--mc);font-weight:700;}
+.modul-kopf h2{margin:.25rem 0 .3rem;color:var(--mc);}
+.modul-kopf p{margin:0;color:var(--text);}
+.block{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:1.25rem 1.4rem;margin-bottom:1.1rem;box-shadow:var(--shadow);}
+.block h3{margin-top:0;color:var(--mc);}
+.block p{margin:.6rem 0;}
+
+.begriffe-liste{display:grid;gap:.6rem;margin:0;padding:0;list-style:none;}
+.begriffe-liste li{padding:.6rem .85rem;background:var(--mc-bg);border-radius:10px;}
+.begriffe-liste b{color:var(--mc);}
+
+.stichpunkte{margin:0;padding-left:1.2rem;}
+.stichpunkte li{margin:.45rem 0;}
+.inline-link{background:none;border:none;padding:0;margin:0;font:inherit;color:var(--mc);text-decoration:underline;text-decoration-style:dotted;text-underline-offset:2px;cursor:pointer;}
+.inline-link:hover{text-decoration-style:solid;}
+
+figure.abbildung{margin:1rem 0;text-align:center;}
+figure.abbildung img{max-width:100%;height:auto;border-radius:12px;border:1px solid var(--line);}
+figure.abbildung figcaption{font-size:.83rem;color:var(--muted);margin-top:.4rem;}
+.bild-reihe{display:flex;flex-wrap:wrap;gap:1.2rem;justify-content:center;}
+.bild-reihe figure{flex:1 1 240px;max-width:320px;margin:0;}
+
+.steckbrief-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;}
+.steckbrief{background:var(--mc-bg);border-radius:12px;padding:1rem 1.1rem;}
+.steckbrief h4{margin:.1rem 0 .5rem;color:var(--mc);}
+.steckbrief dl{margin:0;font-size:.88rem;}
+.steckbrief dt{font-weight:700;margin-top:.5rem;}
+.steckbrief dd{margin:0 0 0;}
+
+.merksatz{background:#fff8e1;border-left:5px solid #e0a800;border-radius:10px;padding:1rem 1.2rem;font-weight:600;}
+.merksatz-label{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:#a87a00;font-weight:700;margin-bottom:.3rem;}
+
+.quiz{border:1px solid var(--line);border-radius:12px;padding:1rem 1.1rem;margin:1rem 0;background:#fdfcf8;}
+.quiz-geloest{background:#f3fbf5;}
+.quiz-nr{font-size:.78rem;color:var(--muted);font-weight:700;}
+.quiz-frage{font-weight:600;margin:.3rem 0 .8rem;}
+.quiz-optionen{display:flex;flex-wrap:wrap;gap:.55rem;}
+.quiz-option{border:2px solid var(--line);background:#fff;padding:.55rem .95rem;border-radius:10px;cursor:pointer;font-size:.93rem;text-align:left;font-family:inherit;color:var(--text);}
+.quiz-option:hover{border-color:var(--mc);}
+.quiz-option.ist-richtig{border-color:#2f8f4e;background:#eafaf0;}
+.quiz-option.ist-falsch{border-color:#c84b31;background:#fdeeea;}
+.quiz-feedback{min-height:1.3em;font-weight:600;margin:.6rem 0 0;font-size:.93rem;}
+.feedback-richtig{color:#1f7a3d;}
+.feedback-falsch{color:#b23a22;}
+.quiz-tipp{margin-top:.55rem;font-size:.88rem;}
+.quiz-tipp summary{cursor:pointer;color:var(--mc);font-weight:600;}
+.quiz-tipp p{margin:.4rem 0 0;}
+
+.reflexion textarea{width:100%;min-height:70px;border:1px solid var(--line);border-radius:8px;padding:.55rem;font-family:inherit;font-size:.93rem;}
+.reflexion .loesung-hinweis{font-size:.85rem;color:var(--muted);margin-top:.4rem;}
+
+.weiter-nav{display:flex;justify-content:space-between;align-items:center;margin-top:1.8rem;gap:1rem;flex-wrap:wrap;}
+.weiter-btn{background:var(--mc);color:#fff;border:none;padding:.7rem 1.2rem;border-radius:999px;cursor:pointer;font-size:.95rem;text-decoration:none;display:inline-flex;align-items:center;gap:.4rem;font-family:inherit;}
+.zurueck-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.9rem;font-family:inherit;text-decoration:underline;}
+
+.fussnote{margin-top:2rem;padding-top:1rem;border-top:1px solid var(--line);font-size:.82rem;color:var(--muted);}
+.fussnote button{background:none;border:none;color:var(--muted);text-decoration:underline;cursor:pointer;font-size:.82rem;font-family:inherit;padding:0;}
+
+@media (max-width:600px){
+  .ansicht{padding:1.1rem .9rem 3rem;}
+  .block,.modul-kopf,.start-intro{padding:1rem 1.1rem;}
+}
+</style>
+</head>
+<body>
+
+<header class="kopf">
+  <div class="kopf-innen">
+    <p class="kopf-titel">Biologie 8</p>
+  </div>
+  <nav class="tabs" aria-label="Module">
+    <button class="tab" data-ziel="start" aria-selected="true">Start</button>
+    <button class="tab" data-ziel="modul1" data-modul="1" aria-selected="false">1 · Ökosysteme</button>
+    <button class="tab" data-ziel="modul2" data-modul="2" aria-selected="false">2 · Nahrungsbeziehungen</button>
+    <button class="tab" data-ziel="modul3" data-modul="3" aria-selected="false">3 · Fotosynthese</button>
+    <button class="tab" data-ziel="modul4" data-modul="4" aria-selected="false">4 · Blattaufbau</button>
+    <button class="tab" data-ziel="modul5" aria-selected="false">5 · Alles im Überblick</button>
+  </nav>
+</header>
+
+<!-- START -->
+<section class="ansicht" data-ansicht="start">
+  <div class="start-intro">
+    <div class="start-kopfbild">
+      <img src="bilder/schildkroete-erde.jpg" alt="Illustration einer Schildkröte mit der Erde als Panzer" loading="lazy">
+      <div class="start-kopfbild-text">
+        <h1>Das Lernprogramm für Jan Philipp</h1>
+        <p>Hier bereitest du dich auf den Test zu <strong>Ökosystemen, Nahrungsbeziehungen, Fotosynthese und dem Aufbau des Blattes</strong> vor. Die Inhalte stammen aus deinem Biobuch und aus euren Arbeitsblättern – du liest kurze Texte, schaust dir Abbildungen an und beantwortest Fragen zum Anklicken. Bei falschen Antworten bekommst du nach dem zweiten Versuch automatisch einen Tipp.</p>
+      </div>
+    </div>
+    <div class="fortschritt-leiste"><div class="fortschritt-fuellung"></div></div>
+    <p class="fortschritt-label">0 von 4 Modulen geschafft</p>
+    <div class="anleitung">
+      <strong>So gehst du vor:</strong> Bearbeite die vier Module in Ruhe nacheinander (insgesamt ca. 1,5–2 Stunden, gerne auf mehrere Tage verteilt). Lies die Texte, schau dir die Bilder genau an und beantworte am Ende jedes Abschnitts die Fragen. Wenn du ein Modul ganz geschafft hast, bekommt die Kachel unten ein Häkchen. In Modul 5 findest du am Ende alle Inhalte noch einmal kurz zum Nachlesen zusammengefasst – mit Links zurück in die passenden Module. Zum Schluss gibt es einen ausdruckbaren Test, den du von Hand ausfüllst.
+    </div>
+  </div>
+
+  <div class="modul-karten">
+    <button class="modul-karte karte-m1" data-modul="1" data-geh-zu="modul1">
+      <span class="modul-karte-kicker">Modul 1</span>
+      <span class="modul-karte-titel">Ökosysteme – Biotop und Biozönose</span>
+      <span class="modul-karte-status">0 von 6 Fragen richtig</span>
+    </button>
+    <button class="modul-karte karte-m2" data-modul="2" data-geh-zu="modul2">
+      <span class="modul-karte-kicker">Modul 2</span>
+      <span class="modul-karte-titel">Nahrungsbeziehungen im Ökosystem</span>
+      <span class="modul-karte-status">0 von 6 Fragen richtig</span>
+    </button>
+    <button class="modul-karte karte-m3" data-modul="3" data-geh-zu="modul3">
+      <span class="modul-karte-kicker">Modul 3</span>
+      <span class="modul-karte-titel">Fotosynthese – Energie für das Ökosystem</span>
+      <span class="modul-karte-status">0 von 6 Fragen richtig</span>
+    </button>
+    <button class="modul-karte karte-m4" data-modul="4" data-geh-zu="modul4">
+      <span class="modul-karte-kicker">Modul 4</span>
+      <span class="modul-karte-titel">Der Aufbau des Blattes</span>
+      <span class="modul-karte-status">0 von 6 Fragen richtig</span>
+    </button>
+    <button class="modul-karte karte-m5" data-geh-zu="modul5">
+      <span class="modul-karte-kicker">Modul 5</span>
+      <span class="modul-karte-titel">Alles im Überblick</span>
+      <span class="modul-karte-status">Kurze Wiederholung ohne Fragen</span>
+    </button>
+  </div>
+
+  <div class="test-karte">
+    <strong>Fertig mit allen Modulen?</strong>
+    <p style="margin:.4rem 0 0;">Dann geht es weiter mit dem Test zum Ausdrucken. Den füllst du von Hand aus – er dauert ungefähr 15 bis 20 Minuten.</p>
+    <a href="test.html" target="_blank" rel="noopener">Zum Test (test.html) →</a>
+  </div>
+</section>
+
+<!-- MODUL 1 -->
+<section class="ansicht" data-ansicht="modul1" style="--mc:var(--m1);--mc-bg:var(--m1-bg);">
+  <div class="modul-kopf">
+    <span class="modul-kicker">Modul 1 von 5</span>
+    <h2>Ökosysteme – Biotop und Biozönose</h2>
+    <p>Was macht einen Lebensraum lebensfreundlich? Und was unterscheidet den Wald von der Wiese?</p>
+  </div>
+
+  <div class="block">
+    <h3>Was ein Lebewesen zum Leben braucht</h3>
+    <p>Forscherinnen und Forscher der europäischen Raumfahrtagentur ESA untersuchen, ob Menschen eines Tages auf dem Mond leben könnten. Der Vergleich mit der Erde zeigt, was Lebewesen wirklich brauchen: flüssiges Wasser, eine schützende Atmosphäre und gemäßigte Temperaturen. Auf dem Mond schwanken die Temperaturen zwischen etwa +130&nbsp;°C und −160&nbsp;°C, es gibt keine Atmosphäre und kein flüssiges Wasser. Ohne Schutzanzug könnte dort niemand überleben.</p>
+    <figure class="abbildung">
+      <img src="bilder/abb-rotkehlchen-faktoren.jpg" alt="Schema: Abiotische und biotische Umweltfaktoren am Beispiel des Rotkehlchens" loading="lazy">
+      <figcaption>Abiotische und biotische Umweltfaktoren am Beispiel des Rotkehlchens (nach Klett, Biologie 8)</figcaption>
+    </figure>
+    <p>Auf der Erde ist jedes Lebewesen von bestimmten <strong>Umweltfaktoren</strong> abhängig. Man unterscheidet zwei Arten:</p>
+    <ul class="begriffe-liste">
+      <li><b>Abiotische Umweltfaktoren</b> – die unbelebten Bedingungen eines Lebensraums: Wasser, Klima, Atmosphäre, Temperatur, Licht, Boden.</li>
+      <li><b>Biotische Umweltfaktoren</b> – alles, was mit anderen Lebewesen zu tun hat: Nahrung, Konkurrenten, Fressfeinde, Krankheitserreger, Artgenossen zur Fortpflanzung.</li>
+    </ul>
+    <p>Jedes Lebewesen hat eigene Ansprüche. Das Rotkehlchen frisst Insekten, Larven und Beeren und brütet in Hecken – man findet es im Wald genauso wie im Stadtpark. Der Steinkauz dagegen braucht alte Bäume mit Bruthöhlen. Werden diese gefällt, verschwindet er, selbst wenn genug Nahrung vorhanden wäre.</p>
+  </div>
+
+  <div class="block">
+    <h3>Biotop und Biozönose</h3>
+    <figure class="abbildung">
+      <img src="bilder/abb-biotop-biozoenose.jpg" alt="Schema: Biotop als unbelebter Lebensraum, Biozönose als Lebewesen-Gemeinschaft" loading="lazy">
+      <figcaption>Biotop (unbelebte Umwelt) und Biozönose (Lebensgemeinschaft)</figcaption>
+    </figure>
+    <ul class="begriffe-liste">
+      <li><b>Biotop</b>: der Lebensraum mit seinen abiotischen Umweltfaktoren – also z.&nbsp;B. Bodenart, Wassermenge, Klima.</li>
+      <li><b>Biozönose</b>: die Gesamtheit aller Lebewesen, die in einem Biotop zusammenleben.</li>
+      <li><b>Ökosystem</b>: Biotop und Biozönose zusammen. Ökosysteme sind nicht starr, sie verändern sich ständig – durch Trockenheit, Stürme, Überschwemmungen oder weil Tiere ein- oder auswandern.</li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <h3>Wald, Wiese, Wattenmeer – drei Ökosysteme im Vergleich</h3>
+    <div class="bild-reihe">
+      <figure class="abbildung">
+        <img src="bilder/abb-oekosystem-wald.jpg" alt="Ökosystem Wald, schematisch dargestellt mit Baumschichten und Tieren" loading="lazy">
+        <figcaption>Ökosystem Wald (schematisch)</figcaption>
+      </figure>
+      <figure class="abbildung">
+        <img src="bilder/foto-buchenwald.jpg" alt="Foto eines Buchenwaldes" loading="lazy">
+        <figcaption>Buchenwald</figcaption>
+      </figure>
+      <figure class="abbildung">
+        <img src="bilder/foto-wiese.jpg" alt="Foto einer blühenden Wiese" loading="lazy">
+        <figcaption>Blühende Wiese</figcaption>
+      </figure>
+    </div>
+    <p><strong>Wald:</strong> Bäume stehen in mehreren Schichten übereinander. Diese Schichtung schafft viele unterschiedliche Lebensräume für Tiere – vom Kronendach bis zum Waldboden.</p>
+    <p><strong>Wiese:</strong> ein vom Menschen geschaffenes Ökosystem mit Blütenschicht, Krautschicht, Streuschicht und Wurzelschicht. Ohne regelmäßiges Mähen würde sich eine Wiese über Sträucher nach und nach in einen Wald verwandeln.</p>
+    <p><strong>Wattenmeer:</strong> geprägt durch Ebbe und Flut. Muscheln, Würmer und Krebse müssen sich an den ständigen Wechsel zwischen Wasser und Trockenheit anpassen.</p>
+  </div>
+
+  <div class="block reflexion">
+    <h3>Deine eigene Exkursion in den Kottenforst</h3>
+    <p>Ihr habt das Ökosystem Wiese schon einmal selbst untersucht. Schau dir deinen eigenen Beobachtungsbogen an:</p>
+    <div class="bild-reihe">
+      <figure class="abbildung">
+        <img src="bilder/beobachtungsbogen-wiese-1.jpg" alt="Eigener Beobachtungsbogen zur Exkursion in den Kottenforst, Seite 1" loading="lazy">
+        <figcaption>Dein Beobachtungsbogen, Teil 1</figcaption>
+      </figure>
+      <figure class="abbildung">
+        <img src="bilder/beobachtungsbogen-wiese-2.jpg" alt="Eigener Beobachtungsbogen zur Exkursion in den Kottenforst, Seite 2" loading="lazy">
+        <figcaption>Dein Beobachtungsbogen, Teil 2</figcaption>
+      </figure>
+    </div>
+    <p>Überlege kurz: Welche abiotischen Faktoren hast du am Waldrand und in der Waldmitte gemessen – und was ist dir dabei aufgefallen?</p>
+    <textarea placeholder="Schreib hier ein bis zwei Sätze, z.B. zu Temperatur, Licht oder Feuchtigkeit ..."></textarea>
+    <details>
+      <summary>Zum Vergleich: deine eigenen Messwerte</summary>
+      <p class="loesung-hinweis">Laut deinem Bogen war es in der Waldmitte kühler (20&nbsp;°C statt 22&nbsp;°C in Schulterhöhe) und der Boden feucht in beiden Bereichen. Außerdem habt ihr sechs verschiedene Baumarten bestimmt (u.&nbsp;a. Stieleiche, Fichte, Rotbuche) – euer Wald war also ein <strong>Mischwald</strong>.</p>
+    </details>
+  </div>
+
+  <div class="block">
+    <h3>Übungsfragen</h3>
+
+    <div class="quiz" data-modul="1" data-id="q1" data-correct="a">
+      <p class="quiz-nr">Frage 1</p>
+      <p class="quiz-frage">Welche der folgenden Faktoren sind abiotisch?</p>
+      <div class="quiz-optionen">
+        <button class="quiz-option" data-opt="a" data-fr="Richtig! Wasser, Temperatur und Boden gehören zur unbelebten Umwelt.">Wasser, Temperatur, Boden</button>
+        <button class="quiz-option" data-opt="b" data-ff="Das sind biotische Faktoren – sie hängen mit anderen Lebewesen zusammen.">Nahrung, Fressfeinde, Krankheitserreger</button>
+        <button class="quiz-option" data-opt="c" data-ff="Auch das sind biotische Faktoren.">Artgenossen, Konkurrenten, Parasiten</button>
+      </div>
+      <p class="quiz-feedback" aria-live="polite"></p>
+      <details class="quiz-tipp"><summary>Tipp</summary><p>Abiotisch heißt unbelebt – denk an Wetter, Boden und Wasser.</p></details>
+    </div>
+
+    <div class="quiz" data-modul="1" data-id="q2" data-correct="b">
+      <p class="quiz-nr">Frage 2</p>
+      <p class="quiz-frage">Was ist die Biozönose eines Ökosystems?</p>
+      <div class="quiz-optionen">
+        <button class="quiz-option" data-opt="a" data-ff="Das ist eher die Beschreibung des Biotops.">Der unbelebte Lebensraum</button>
+        <button class="quiz-option" data-opt="b" data-fr="Richtig! Die Biozönose ist die Lebensgemeinschaft aller Tiere, Pflanzen und anderer Lebewesen in einem Biotop.">Die Gesamtheit aller Lebewesen in einem Biotop</button>
+        <button class="quiz-option" data-opt="c" data-ff="Auch Tiere und Pilze gehören zur Biozönose, nicht nur Pflanzen.">Nur die Pflanzen eines Lebensraums</button>
+      </div>
+      <p class="quiz-feedback" aria-live="polite"></p>
+      <details class="quiz-tipp"><summary>Tipp</summary><p>„Bio-zönose" kommt aus dem Griechischen und bedeutet etwa „Lebensgemeinschaft".</p></details>
+    </div>
+
+    <div class="quiz" data-modul="1" data-id="q3" data-correct="falsch">
+      <p class="quiz-nr">Frage 3 · Richtig oder falsch?</p>
+      <p class="quiz-frage">„Eine Wiese bleibt auch ohne Mähen für immer eine Wiese."</p>
+      <div class="quiz-optionen">
+        <button class="quiz-option" data-opt="wahr" data-ff="Schau noch mal in den Text zum Ökosystem Wiese.">Richtig</button>
+        <button class="quiz-option" data-opt="falsch" data-fr="Richtig! Ohne Mähen wachsen Sträucher und Bäume – aus der Wiese wird mit der Zeit ein Wald.">Falsch</button>
+      </div>
+      <p class="quiz-feedback" aria-live="polite"></p>
+      <details class="quiz-tipp"><summary>Tipp</summary><p>Was würde passieren, wenn niemand mehr mäht?</p></details>
+    </div>
+
+    <div class="quiz" data-modul="1" data-id="q4" data-correct="b">
+      <p class="quiz-nr">Frage 4</p>
+      <p class="quiz-frage">Warum wird der Steinkauz seltener, obwohl genug Nahrung für ihn da wäre?</p>
+      <div class="quiz-optionen">
+        <button class="quiz-option" data-opt="a" data-ff="Wasser ist bei dieser Art nicht das Problem.">Weil ihm Wasser fehlt</button>
+        <button class="quiz-option" data-opt="b" data-fr="Richtig! Ihm fehlen alte Bäume mit Bruthöhlen zum Brüten.">Weil alte Bäume mit Bruthöhlen gefällt werden</button>
+        <button class="quiz-option" data-opt="c" data-ff="Von Fressfeinden war im Text nicht die Rede.">Weil er zu viele Fressfeinde hat</button>
+      </div>
+      <p class="quiz-feedback" aria-live="polite"></p>
+      <details class="quiz-tipp"><summary>Tipp</summary><p>Es geht um seinen Lebensraum zum Brüten, nicht um Nahrung.</p></details>
+    </div>
+
+    <div class="quiz" data-modul="1" data-id="q5" data-correct="b">
+      <p class="quiz-nr">Frage 5</p>
+      <p class="quiz-frage">Welches Beispiel ist ein biotischer Faktor?</p>
+      <div class="quiz-optionen">
+        <button class="quiz-option" data-opt="a" data-ff="Sonnenlicht ist unbelebt – also abiotisch.">Sonnenlicht</button>
+        <button class="quiz-option" data-opt="b" data-fr="Richtig! Fressfeinde sind andere Lebewesen – das ist biotisch.">Fressfeinde</button>
+        <button class="quiz-option" data-opt="c" data-ff="Niederschlag ist unbelebt – also abiotisch.">Niederschlag</button>
+      </div>
+      <p class="quiz-feedback" aria-live="polite"></p>
+      <details class="quiz-tipp"><summary>Tipp</summary><p>Biotisch bedeutet: Es hat mit anderen Lebewesen zu tun.</p></details>
+    </div>
+
+    <div class="quiz" data-modul="1" data-id="q6" data-correct="c">
+      <p class="quiz-nr">Frage 6</p>
+      <p class="quiz-frage">Wie nennt man den Lebensraum mit seinen unbelebten Bedingungen?</p>
+      <div class="quiz-optionen">
+        <button class="quiz-option" data-opt="a" data-ff="Das ist die Lebensgemeinschaft, nicht der Lebensraum selbst.">Biozönose</button>
+        <button class="quiz-option" data-opt="b" data-ff="Das Ökosystem umfasst Biotop und Biozönose zusammen.">Ökosystem</button>
+        <button class="quiz-option" data-opt="c" data-fr="Richtig! Der Begriff kommt vom griechischen Wort für „Ort".">Biotop</button>
+      </div>
+      <p class="quiz-feedback" aria-live="polite"></p>
+      <details class="quiz-tipp"><summary>Tipp</summary><p>Denk an das Wort „Topos" – das bedeutet „Ort".</p></details>
+    </div>
+  </div>
+
+  <div class="merksatz">
+    <span class="merksatz-label">Merksatz</span>
+    Ein Ökosystem besteht aus dem Biotop (unbelebter Lebensraum) und der Biozönose (Lebensgemeinschaft aller Lebewesen darin). Abiotische Faktoren sind unbelebt, z.&nbsp;B. Wasser und Temperatur. Biotische Faktoren hängen mit anderen Lebewesen zusammen, z.&nbsp;B. Nahrung und Fressfeinde.
+  </div>
+
+  <div class="weiter-nav">
+    <button class="zurueck-btn" data-geh-zu="start">← Zur Übersicht</button>
+    <button class="weiter-btn" data-geh-zu="modul2">Weiter zu Modul 2 →</button>
+  </div>
+</section>
+
+<!-- MODUL 2 -->
+<section class="ansicht" data-ansicht="modul2" style="--mc:var(--m2);--mc-bg:var(--m2-bg);">
+  <div class="modul-kopf">
+    <span class="modul-kicker">Modul 2 von 5</span>
+    <h2>Nahrungsbeziehungen im Ökosystem</h2>
+    <p>Wer frisst wen? Von der Nahrungskette zum Nahrungsnetz.</p>
+  </div>
+
+  <div class="block">
+    <h3>Von der Kohlmeise zum Sperber</h3>
+    <p>Die Kohlmeise sucht im Wald an Rinde und Blättern nach Insekten und ihren Larven – zum Beispiel nach Eichenwicklerraupen. Diese Raupen wiederum fressen Eichenblätter. Die Kohlmeise selbst wird manchmal vom Sperber gefressen. Solche Abhängigkeiten nennt man <strong>Nahrungsbeziehungen</strong>.</p>
+    <figure class="abbildung">
+      <img src="bilder/abb-nahrungskette.jpg" alt="Nahrungskette: Eichenblatt, Eichenwicklerraupe, Kohlmeise, Sperber" loading="lazy">
+      <figcaption>Nahrungskette aus Eichenblatt, Eichenwicklerraupe, Kohlmeise und Sperber</figcaption>
+    </figure>
+  </div>
+
+  <div class="block">
+    <h3>Produzenten und Konsumenten</h3>
+    <p>Pflanzen stellen aus energiearmen Stoffen energiereiche Stoffe wie Glucose selbst her. Deshalb nennt man sie <strong>Produzenten</strong> (Erzeuger). Tiere fressen andere Lebewesen und werden <strong>Konsumenten</strong> (Verbraucher) genannt. Dabei unterscheidet man:</p>
+    <ul class="begriffe-liste">
+      <li><b>Herbivore</b> (Pflanzenfresser) – sie fressen Pflanzen direkt und stehen als <b>Konsumenten 1.&nbsp;Ordnung</b> am Anfang der Nahrungskette, z.&nbsp;B. die Eichenwicklerraupe.</li>
+      <li><b>Carnivore</b> (Fleischfresser) – sie fressen andere Konsumenten: <b>Konsumenten 2.&nbsp;Ordnung</b> (z.&nbsp;B. die Kohlmeise) und <b>Konsumenten 3.&nbsp;Ordnung</b> (z.&nbsp;B. der Sperber).</li>
+    </ul>
+    <p>Eine <strong>Nahrungskette</strong> zeigt eine einzelne Abfolge: Eichenblatt → Eichenwicklerraupe → Kohlmeise → Sperber. In Wirklichkeit frisst kaum ein Tier nur eine einzige Beuteart. Eichenwickler werden zum Beispiel sowohl von Kohlmeisen als auch von Buntspechten gefressen. Verbindet man alle Nahrungsketten eines Ökosystems, entsteht ein <strong>Nahrungsnetz</strong>.</p>
+    <figure class="abbildung">
+      <img src="bilder/abb-nahrungsnetz-wald.jpg" alt="Vereinfachtes Nahrungsnetz des Waldes mit Borkenkäfer, Buntspecht, Fuchs, Reh, Waldmaus, Kreuzotter, Grasfrosch, Kohlmeise und Sperber" loading="lazy">
+      <figcaption>Vereinfachtes Nahrungsnetz des Waldes</figcaption>
+    </figure>
+    <p>Ein Nahrungsnetz macht ein Ökosystem stabiler: Stirbt eine Art aus, können die übrigen oft auf andere Nahrungsquellen ausweichen. Je mehr Verbindungen ein Nahrungsnetz hat, desto weniger ist eine einzelne Art vom Aussterben bedroht.</p>
+  </div>
+
+  <div class="block">
+    <h3>Drei Steckbriefe aus dem Wald</h3>
+    <div class="steckbrief-grid">
+      <div class="steckbrief">
+        <h4>Fuchs</h4>
+        <dl>
+          <dt>Lebensraum</dt><dd>Wälder, Äcker, Wiesen</dd>
+          <dt>Nahrung</dt><dd>Rehkitze, Mäuse, Kaninchen, Regenwürmer, Aas, Früchte</dd>
+          <dt>Feinde</dt><dd>Wölfe</dd>
+        </dl>
+      </div>
+      <div class="steckbrief">
+        <h4>Waldmaus</h4>
+        <dl>
+          <dt>Lebensraum</dt><dd>Äcker, Gärten, Randbereiche des Waldes</dd>
+          <dt>Nahrung</dt><dd>Samen, Früchte, Insekten, Knospen, Pilze</dd>
+          <dt>Feinde</dt><dd>Greifvögel, Füchse, Schlangen</dd>
+        </dl>
+      </div>
+      <div class="steckbrief">
+        <h4>Ameise</h4>
+        <dl>
+          <dt>Lebensraum</dt><dd>Lichte Wälder</dd>
+          <dt>Nahrung</dt><dd>Insekten, Läusekot</dd>
+          <dt>Feinde</dt><dd>Spechte, Frösche, Schlangen</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>Übungsfragen</h3>
+
+    <div class="quiz" data-modul="2" data-id="q1" data-correct="b">
+      <p class="quiz-nr">Frage 1</p>
+      <p class="quiz-frage">Wie nennt man Pflanzen, weil sie selbst energiereiche Stoffe herstellen?</p>
+      <div class="quiz-optionen">
+        <button class="quiz-option" data-opt="a" data-ff="Konsumenten fressen andere Lebewesen – das machen Pflanzen nicht.">Konsumenten</button>
+        <button class="quiz-option" data-opt="b" data-fr="Richtig! Pflanzen produzieren ihre Nährstoffe selbst.">Produzenten</button>
+        <button class="quiz-option" data-opt="c" data-ff="Diesen Begriff habt ihr in diesem Zusammenhang nicht verwendet.">Destruenten</button>
+      </div>
+      <p class="quiz-feedback" aria-live="polite"></p>
+      <details class="quiz-tipp"><summary>Tipp</summary><p>Sie produzieren ihre Nahrung selbst.</p></details>
+    </div>
+
+    <div class="quiz" data-modul="2" data-id="q2" data-correct="b">
+      <p class="quiz-nr">Frage 2</p>
+      <p class="quiz-frage">Die Eichenwicklerraupe frisst Eichenblätter. Zu welcher Gruppe gehört sie?</p>
+      <div class="quiz-optionen">
+        <button class="quiz-option" data-opt="a" data-ff="Sie frisst Pflanzen, stellt sie aber nicht selbst her.">Produzent</button>
+        <button class="quiz-option" data-opt="b" data-fr="Richtig! Als Pflanzenfresserin steht sie am Anfang der Konsumenten.">Konsument 1. Ordnung</button>
+        <button class="quiz-option" data-opt="c" data-ff="Das wäre erst bei einem Fleischfresser weiter hinten in der Kette der Fall.">Konsument 3. Ordnung</button>
+      </div>
+      <p class="quiz-feedback" aria-live="polite"></p>
+      <details class="quiz-tipp"><summary>Tipp</summary><p>Sie frisst direkt eine Pflanze – das ist die erste Stufe der Konsumenten.</p></details>
+    </div>
+
+    <div class="quiz" data-modul="2" data-id="q3" data-correct="b">
+      <p class="quiz-nr">Frage 3</p>
+      <p class="quiz-frage">In der Kette Eichenblatt → Eichenwicklerraupe → Kohlmeise → Sperber: Welches Glied steht an dritter Stelle?</p>
+      <div class="quiz-optionen">
+        <button class="quiz-option" data-opt="a" data-ff="Die Raupe steht an zweiter Stelle.">Eichenwicklerraupe</button>
+        <button class="quiz-option" data-opt="b" data-fr="Richtig! Eichenblatt (1), Raupe (2), Kohlmeise (3), Sperber (4).">Kohlmeise</button>
+        <button class="quiz-option" data-opt="c" data-ff="Der Sperber steht an vierter Stelle.">Sperber</button>
+      </div>
+      <p class="quiz-feedback" aria-live="polite"></p>
+      <details class="quiz-tipp"><summary>Tipp</summary><p>Zähle von links: Eichenblatt ist Glied 1, dann 2, dann 3 ...</p></details>
+    </div>
+
+    <div class="quiz" data-modul="2" data-id="q4" data-correct="wahr">
+      <p class="quiz-nr">Frage 4 · Richtig oder falsch?</p>
+      <p class="quiz-frage">„Ein Nahrungsnetz besteht aus mehreren miteinander verknüpften Nahrungsketten."</p>
+      <div class="quiz-optionen">
+        <button class="quiz-option" data-opt="wahr" data-fr="Richtig! Genau das zeigt die Abbildung mit den vielen Pfeilen.">Richtig</button>
+        <button class="quiz-option" data-opt="falsch" data-ff="Schau dir die Abbildung zum Nahrungsnetz noch einmal an.">Falsch</button>
+      </div>
+      <p class="quiz-feedback" aria-live="polite"></p>
+      <details class="quiz-tipp"><summary>Tipp</summary><p>Denk an das Bild mit den vielen Pfeilen zwischen Borkenkäfer, Fuchs, Reh und Kreuzotter.</p></details>
+    </div>
+
+    <div class="quiz" data-modul="2" data-id="q5" data-correct="b">
+      <p class="quiz-nr">Frage 5</p>
+      <p class="quiz-frage">Was passiert in einem artenreichen Ökosystem meist, wenn eine Tierart ausstirbt?</p>
+      <div class="quiz-optionen">
+        <button class="quiz-option" data-opt="a" data-ff="Das ist eher bei sehr einfachen Nahrungsketten der Fall.">Das ganze Ökosystem bricht sofort zusammen</button>
+        <button class="quiz-option" data-opt="b" data-fr="Richtig! Je vielfältiger das Nahrungsnetz, desto stabiler das Ökosystem.">Andere Tiere können oft auf andere Nahrung ausweichen</button>
+        <button class="quiz-option" data-opt="c" data-ff="Ganz ohne Folgen bleibt so ein Ereignis meistens nicht.">Es ändert sich gar nichts</button>
+      </div>
+      <p class="quiz-feedback" aria-live="polite"></p>
+      <details class="quiz-tipp"><summary>Tipp</summary><p>Je mehr Verbindungen ein Nahrungsnetz hat, desto ... stabiler ist es.</p></details>
+    </div>
+
+    <div class="quiz" data-modul="2" data-id="q6" data-correct="b">
+      <p class="quiz-nr">Frage 6</p>
+      <p class="quiz-frage">Ein Fuchs frisst Mäuse und Kaninchen. Welche Rolle hat er im Ökosystem?</p>
+      <div class="quiz-optionen">
+        <button class="quiz-option" data-opt="a" data-ff="Produzenten stellen ihre Nahrung selbst her – das trifft auf Tiere nicht zu.">Produzent</button>
+        <button class="quiz-option" data-opt="b" data-fr="Richtig! Er frisst andere Lebewesen und ist damit ein Konsument.">Konsument</button>
+        <button class="quiz-option" data-opt="c" data-ff="Biotop ist kein Begriff für ein Lebewesen, sondern für einen Lebensraum.">Biotop</button>
+      </div>
+      <p class="quiz-feedback" aria-live="polite"></p>
+      <details class="quiz-tipp"><summary>Tipp</summary><p>Er frisst andere Lebewesen – was ist er damit?</p></details>
+    </div>
+  </div>
+
+  <div class="merksatz">
+    <span class="merksatz-label">Merksatz</span>
+    Pflanzen sind Produzenten, Tiere sind Konsumenten (1., 2., 3. Ordnung). Eine Nahrungskette zeigt eine einzelne Abfolge, ein Nahrungsnetz verbindet viele Nahrungsketten und macht ein Ökosystem stabiler.
+  </div>
+
+  <div class="weiter-nav">
+    <button class="zurueck-btn" data-geh-zu="modul1">← Modul 1</button>
+    <button class="weiter-btn" data-geh-zu="modul3">Weiter zu Modul 3 →</button>
+  </div>
+</section>
+
+<!-- MODUL 3 -->
+<section class="ansicht" data-ansicht="modul3" style="--mc:var(--m3);--mc-bg:var(--m3-bg);">
+  <div class="modul-kopf">
+    <span class="modul-kicker">Modul 3 von 5</span>
+    <h2>Fotosynthese – Energie für das Ökosystem</h2>
+    <p>Woher nehmen Pflanzen ihre Energie, wenn sie doch keine Nahrung fressen?</p>
+  </div>
+
+  <div class="block">
+    <h3>Autotroph und heterotroph</h3>
+    <p>Pflanzen und Tiere brauchen ständig Energie – für Wachstum, Bewegung oder die Funktion ihrer Organe. Tiere nehmen diese Energie über die Nahrung auf. Man nennt sie <strong>heterotroph</strong>.</p>
+    <p>Grüne Pflanzen dagegen nehmen keine Nahrung auf. Sie stellen ihre Nährstoffe selbst her – mithilfe von Sonnenenergie. Man nennt sie <strong>autotroph</strong>. Dieser Vorgang heißt <strong>Fotosynthese</strong> und findet in den Chloroplasten der grünen Blätter statt.</p>
+    <figure class="abbildung">
+      <img src="bilder/foto-buche.jpg" alt="Foto einer alten, großen Buche" loading="lazy">
+      <figcaption>Eine alte Buche</figcaption>
+    </figure>
+  </div>
+
+  <div class="block">
+    <h3>Die Wortgleichung der Fotosynthese</h3>
+    <p>Bei der Fotosynthese entstehen aus Wasser und Kohlenstoffdioxid mithilfe von Lichtenergie Glucose (Traubenzucker) und Sauerstoff:</p>
+    <p style="text-align:center;font-weight:700;font-size:1.05rem;background:var(--mc-bg);padding:.8rem;border-radius:10px;">Wasser&nbsp;+&nbsp;Kohlenstoffdioxid &nbsp;—[Licht]→&nbsp; Glucose&nbsp;+&nbsp;Sauerstoff</p>
+    <p>Das Wasser nehmen die Pflanzen über die Wurzeln aus dem Boden auf, das Kohlenstoffdioxid über die Spaltöffnungen aus der Luft.</p>
+    <figure class="abbildung">
+      <img src="bilder/abb-fotosynthese-vorgaenge.jpg" alt="Vorgänge bei der Fotosynthese: Wasser- und Mineralstoffaufnahme aus der Wurzel, Kohlenstoffdioxid aus der Luft, Glucose- und Sauerstoffbildung im Blatt" loading="lazy">
+      <figcaption>Vorgänge bei der Fotosynthese</figcaption>
+    </figure>
+    <p>Die Fotosynthese ist enorm leistungsfähig: Eine 100 Jahre alte Buche hat mit ihren Blättern eine Oberfläche von rund <strong>600&nbsp;m²</strong>. An einem sonnigen Tag bildet sie damit etwa <strong>13&nbsp;kg Glucose</strong> und <strong>14&nbsp;kg Sauerstoff</strong>. Überschüssige Glucose speichern Pflanzen meist als Stärke, zum Beispiel in Kartoffeln, Getreidekörnern oder Hülsenfrüchten.</p>
+  </div>
+
+  <div class="block">
+    <h3>Zellatmung – auch bei Pflanzen</h3>
+    <p>Auch Pflanzen betreiben <strong>Zellatmung</strong>: In den Mitochondrien wird Glucose mithilfe von Sauerstoff zu Kohlenstoffdioxid und Wasser abgebaut. Dabei wird Energie freigesetzt – das ist quasi das Gegenstück zur Fotosynthese.</p>
+    <figure class="abbildung">
+      <img src="bilder/abb-chloroplast-mitochondrium.jpg" alt="Schema: Im Chloroplast läuft die Fotosynthese ab, im Mitochondrium die Zellatmung" loading="lazy">
+      <figcaption>Fotosynthese im Chloroplast, Zellatmung im Mitochondrium</figcaption>
+    </figure>
+    <div class="bild-reihe">
+      <figure class="abbildung">
+        <img src="bilder/abb-pflanzenzelle.jpg" alt="Schema einer Pflanzenzelle mit Zellkern, Zellplasma, Mitochondrien, Vakuole und Zellmembran" loading="lazy">
+        <figcaption>Zelle einer grünen Pflanze</figcaption>
+      </figure>
+      <figure class="abbildung">
+        <img src="bilder/abb-tierzelle.jpg" alt="Schema einer Tier- bzw. Menschenzelle mit Zellkern, Zellplasma, Mitochondrien und Zellmembran" loading="lazy">
+        <figcaption>Zelle eines Menschen oder Tieres</figcaption>
+      </figure>
+    </div>
+    <p>Pflanzenzellen besitzen zusätzlich zum Grundbauplan aller Zellen (Zellkern, Zellplasma, Zellmembran, Mitochondrien) noch <strong>Chloroplasten</strong> (für die Fotosynthese), eine <strong>Zellwand</strong> (für Stabilität) und meist eine große <strong>Vakuole</strong> (Speicher für Wasser und Nährstoffe).</p>
+  </div>
+
+  <div class="block">
+    <h3>Übungsfragen</h3>
+
+    <div class="quiz" data-modul="3" data-id="q1" data-correct="a">
+      <p class="quiz-nr">Frage 1</p>
+      <p class="quiz-frage">Welche zwei Stoffe entstehen bei der Fotosynthese?</p>
+      <div class="quiz-optionen">
+        <button class="quiz-option" data-opt="a" data-fr="Richtig! Glucose ist der Zucker, Sauerstoff das Gas, das dabei frei wird.">Glucose und Sauerstoff</button>
+        <button class="quiz-option" data-opt="b" data-ff="Stärke entsteht erst später aus überschüssiger Glucose, nicht direkt bei der Fotosynthese.">Stärke und Stickstoff</button>
+        <button class="quiz-option" data-opt="c" data-ff="Das sind nicht die Produkte der Fotosynthese.">Eiweiß und Wasserstoff</button>
+      </div>
+      <p class="quiz-feedback" aria-live="polite"></p>
+      <details class="quiz-tipp"><summary>Tipp</summary><p>Einer der Stoffe ist ein Zucker, der andere ein Gas zum Atmen.</p></details>
+    </div>
+
+    <div class="quiz" data-modul="3" data-id="q2" data-correct="b">
+      <p class="quiz-nr">Frage 2</p>
+      <p class="quiz-frage">Woher bekommt die Pflanze das Kohlenstoffdioxid für die Fotosynthese?</p>
+      <div class="quiz-optionen">
+        <button class="quiz-option" data-opt="a" data-ff="Über die Wurzeln kommt vor allem Wasser mit Mineralstoffen.">Aus dem Boden über die Wurzeln</button>
+        <button class="quiz-option" data-opt="b" data-fr="Richtig! Kohlenstoffdioxid gelangt als Gas über die Spaltöffnungen in das Blatt.">Aus der Luft über die Spaltöffnungen</button>
+        <button class="quiz-option" data-opt="c" data-ff="Wasser liefert das Wasser für die Fotosynthese, nicht das Kohlenstoffdioxid.">Aus dem Wasser</button>
+      </div>
+      <p class="quiz-feedback" aria-live="polite"></p>
+      <details class="quiz-tipp"><summary>Tipp</summary><p>Es ist ein Gas aus der Luft.</p></details>
+    </div>
+
+    <div class="quiz" data-modul="3" data-id="q3" data-correct="b">
+      <p class="quiz-nr">Frage 3</p>
+      <p class="quiz-frage">Warum nennt man grüne Pflanzen „autotroph"?</p>
+      <div class="quiz-optionen">
+        <button class="quiz-option" data-opt="a" data-ff="Pflanzen fressen keine anderen Pflanzen.">Sie fressen andere Pflanzen</button>
+        <button class="quiz-option" data-opt="b" data-fr="Richtig! „Auto" heißt selbst, „troph" heißt Ernährung.">Sie stellen ihre Nährstoffe selbst her</button>
+        <button class="quiz-option" data-opt="c" data-ff="Auch Pflanzen brauchen Energie, sie gewinnen sie nur selbst.">Sie brauchen keine Energie</button>
+      </div>
+      <p class="quiz-feedback" aria-live="polite"></p>
+      <details class="quiz-tipp"><summary>Tipp</summary><p>„Auto" heißt selbst, „troph" heißt Ernährung.</p></details>
+    </div>
+
+    <div class="quiz" data-modul="3" data-id="q4" data-correct="falsch">
+      <p class="quiz-nr">Frage 4 · Richtig oder falsch?</p>
+      <p class="quiz-frage">„Pflanzen betreiben nur Fotosynthese, aber keine Zellatmung."</p>
+      <div class="quiz-optionen">
+        <button class="quiz-option" data-opt="wahr" data-ff="Denk an die Mitochondrien in der Pflanzenzelle – was machen die?">Richtig</button>
+        <button class="quiz-option" data-opt="falsch" data-fr="Richtig! Pflanzen betreiben in ihren Mitochondrien genauso Zellatmung wie Tiere.">Falsch</button>
+      </div>
+      <p class="quiz-feedback" aria-live="polite"></p>
+      <details class="quiz-tipp"><summary>Tipp</summary><p>Auch Pflanzenzellen haben Mitochondrien – wofür sind die da?</p></details>
+    </div>
+
+    <div class="quiz" data-modul="3" data-id="q5" data-correct="a">
+      <p class="quiz-nr">Frage 5</p>
+      <p class="quiz-frage">Welche Bedingungen führen eher zu einer hohen Fotosyntheserate?</p>
+      <div class="quiz-optionen">
+        <button class="quiz-option" data-opt="a" data-fr="Richtig! Licht, Wasser und Kohlenstoffdioxid in ausreichender Menge begünstigen die Fotosynthese.">Ausreichend Licht, Wasser und Kohlenstoffdioxid</button>
+        <button class="quiz-option" data-opt="b" data-ff="Ohne Licht kann keine Fotosynthese ablaufen.">Starke Dunkelheit</button>
+        <button class="quiz-option" data-opt="c" data-ff="Ohne genug Wasser sinkt die Fotosyntheserate.">Wassermangel</button>
+      </div>
+      <p class="quiz-feedback" aria-live="polite"></p>
+      <details class="quiz-tipp"><summary>Tipp</summary><p>Schau dir noch einmal deine eigene Tabelle aus dem Heft dazu an.</p></details>
+    </div>
+
+    <div class="quiz" data-modul="3" data-id="q6" data-correct="b">
+      <p class="quiz-nr">Frage 6</p>
+      <p class="quiz-frage">Was unterscheidet eine Pflanzenzelle von einer Tierzelle?</p>
+      <div class="quiz-optionen">
+        <button class="quiz-option" data-opt="a" data-ff="Einen Zellkern haben beide Zelltypen.">Nur die Pflanzenzelle hat einen Zellkern</button>
+        <button class="quiz-option" data-opt="b" data-fr="Richtig! Chloroplasten, Zellwand und eine große Vakuole findet man nur bei Pflanzenzellen.">Nur die Pflanzenzelle hat Chloroplasten, Zellwand und meist eine große Vakuole</button>
+        <button class="quiz-option" data-opt="c" data-ff="Mitochondrien haben beide Zelltypen – sie betreiben beide Zellatmung.">Nur die Tierzelle hat Mitochondrien</button>
+      </div>
+      <p class="quiz-feedback" aria-live="polite"></p>
+      <details class="quiz-tipp"><summary>Tipp</summary><p>Vergleiche die beiden Zell-Abbildungen genau miteinander.</p></details>
+    </div>
+  </div>
+
+  <div class="merksatz">
+    <span class="merksatz-label">Merksatz</span>
+    Bei der Fotosynthese nutzen grüne Pflanzen Lichtenergie, um aus Kohlenstoffdioxid und Wasser energiereiche Glucose herzustellen. Dabei entsteht Sauerstoff.
+  </div>
+
+  <div class="weiter-nav">
+    <button class="zurueck-btn" data-geh-zu="modul2">← Modul 2</button>
+    <button class="weiter-btn" data-geh-zu="modul4">Weiter zu Modul 4 →</button>
+  </div>
+</section>
+
+<!-- MODUL 4 -->
+<section class="ansicht" data-ansicht="modul4" style="--mc:var(--m4);--mc-bg:var(--m4-bg);">
+  <div class="modul-kopf">
+    <span class="modul-kicker">Modul 4 von 5</span>
+    <h2>Der Aufbau des Blattes</h2>
+    <p>Wo genau in der Pflanze findet die Fotosynthese statt – und wie ist ein Blatt aufgebaut?</p>
+  </div>
+
+  <div class="block">
+    <h3>Die Gewebeschichten des Blattes</h3>
+    <p>Laubblätter bestehen aus mehreren Gewebeschichten, die jeweils eine eigene Aufgabe haben:</p>
+    <figure class="abbildung">
+      <img src="bilder/abb-blattquerschnitt.jpg" alt="Blattquerschnitt mit Kutikula, oberer Epidermis, Palisadengewebe, Schwammgewebe, unterer Epidermis, Spaltöffnung und Leitungsgewebe" loading="lazy">
+      <figcaption>Blattquerschnitt eines Laubblattes</figcaption>
+    </figure>
+    <ul class="begriffe-liste">
+      <li><b>Kutikula</b>: eine dünne, wachsartige Schicht, die das Blatt vor dem Austrocknen schützt.</li>
+      <li><b>Obere Epidermis</b>: verdickte Außenwände, bildet den oberen Abschluss des Blattes.</li>
+      <li><b>Palisadengewebe</b>: lange, dicht stehende Zellen mit sehr vielen Chloroplasten – hier läuft der größte Teil der Fotosynthese ab.</li>
+      <li><b>Schwammgewebe</b>: locker aufgebaute Zellen mit Lufträumen dazwischen – sorgt für die Durchlüftung des Blattes.</li>
+      <li><b>Untere Epidermis mit Spaltöffnungen</b>: Durch die Spaltöffnungen verdunstet Wasser. Dadurch entsteht ein Sog, der Wasser aus der Wurzel in die Blätter zieht. Bei großer Hitze oder Trockenheit schließen sich die Spaltöffnungen, um die Pflanze vor dem Austrocknen zu schützen.</li>
+      <li><b>Leitungsgewebe</b> (Blattadern): transportiert Wasser und Mineralstoffe aus der Wurzel in die Blätter und Zucker von den grünen Zellen in alle anderen Pflanzenteile.</li>
+    </ul>
+  </div>
+
+  <div class="block reflexion">
+    <h3>Deine eigene Zeichnung</h3>
+    <p>Du hast den Blattquerschnitt schon einmal selbst mikroskopiert und gezeichnet. Vergleiche deine Zeichnung mit der Abbildung aus dem Buch – findest du alle Bestandteile wieder?</p>
+    <div class="bild-reihe">
+      <figure class="abbildung">
+        <img src="bilder/eigene-skizze-blatt.jpg" alt="Eigene Zeichnung eines Blattquerschnitts aus dem Mikroskopieren im Unterricht" loading="lazy">
+        <figcaption>Deine eigene Zeichnung (Nadelblatt, Mikroskopie)</figcaption>
+      </figure>
+      <figure class="abbildung">
+        <img src="bilder/abb-blattquerschnitt.jpg" alt="Blattquerschnitt aus dem Schulbuch zum Vergleich" loading="lazy">
+        <figcaption>Blattquerschnitt aus dem Buch zum Vergleich</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>Übungsfragen</h3>
+
+    <div class="quiz" data-modul="4" data-id="q1" data-correct="a">
+      <p class="quiz-nr">Frage 1</p>
+      <p class="quiz-frage">Welche Schicht schützt das Blatt vor dem Austrocknen?</p>
+      <div class="quiz-optionen">
+        <button class="quiz-option" data-opt="a" data-fr="Richtig! Die wachsartige Kutikula liegt ganz außen und schützt vor Austrocknung.">Kutikula</button>
+        <button class="quiz-option" data-opt="b" data-ff="Das Schwammgewebe liegt innen und sorgt für die Durchlüftung.">Schwammgewebe</button>
+        <button class="quiz-option" data-opt="c" data-ff="Das Leitungsgewebe transportiert Stoffe, schützt aber nicht vor dem Austrocknen.">Leitungsgewebe</button>
+      </div>
+      <p class="quiz-feedback" aria-live="polite"></p>
+      <details class="quiz-tipp"><summary>Tipp</summary><p>Es ist eine dünne, wachsartige Schicht ganz außen auf dem Blatt.</p></details>
+    </div>
+
+    <div class="quiz" data-modul="4" data-id="q2" data-correct="b">
+      <p class="quiz-nr">Frage 2</p>
+      <p class="quiz-frage">In welcher Schicht findet der größte Teil der Fotosynthese statt?</p>
+      <div class="quiz-optionen">
+        <button class="quiz-option" data-opt="a" data-ff="Die untere Epidermis enthält vor allem die Spaltöffnungen.">Untere Epidermis</button>
+        <button class="quiz-option" data-opt="b" data-fr="Richtig! Diese Zellen enthalten besonders viele Chloroplasten.">Palisadengewebe</button>
+        <button class="quiz-option" data-opt="c" data-ff="Die Kutikula enthält keine Chloroplasten.">Kutikula</button>
+      </div>
+      <p class="quiz-feedback" aria-live="polite"></p>
+      <details class="quiz-tipp"><summary>Tipp</summary><p>Diese Zellen sind lang gestreckt und enthalten besonders viele Chloroplasten.</p></details>
+    </div>
+
+    <div class="quiz" data-modul="4" data-id="q3" data-correct="b">
+      <p class="quiz-nr">Frage 3</p>
+      <p class="quiz-frage">Wozu dienen die Spaltöffnungen?</p>
+      <div class="quiz-optionen">
+        <button class="quiz-option" data-opt="a" data-ff="Das ist nicht ihre Hauptaufgabe.">Nur zum Festhalten des Blattes</button>
+        <button class="quiz-option" data-opt="b" data-fr="Richtig! Über die Spaltöffnungen verdunstet Wasser und es findet Gasaustausch statt.">Zum Gasaustausch und zur Verdunstung von Wasser</button>
+        <button class="quiz-option" data-opt="c" data-ff="Zucker wird nicht in den Spaltöffnungen gespeichert.">Zum Speichern von Zucker</button>
+      </div>
+      <p class="quiz-feedback" aria-live="polite"></p>
+      <details class="quiz-tipp"><summary>Tipp</summary><p>Denk an den „Sog", der Wasser aus der Wurzel in die Blätter zieht.</p></details>
+    </div>
+
+    <div class="quiz" data-modul="4" data-id="q4" data-correct="falsch">
+      <p class="quiz-nr">Frage 4 · Richtig oder falsch?</p>
+      <p class="quiz-frage">„Bei großer Hitze öffnen sich die Spaltöffnungen noch weiter."</p>
+      <div class="quiz-optionen">
+        <button class="quiz-option" data-opt="wahr" data-ff="Überlege, was bei Hitze mit dem Wasserverlust der Pflanze passieren würde.">Richtig</button>
+        <button class="quiz-option" data-opt="falsch" data-fr="Richtig! Bei großer Hitze oder Trockenheit schließen sich die Spaltöffnungen, um Wasser zu sparen.">Falsch</button>
+      </div>
+      <p class="quiz-feedback" aria-live="polite"></p>
+      <details class="quiz-tipp"><summary>Tipp</summary><p>Was würde passieren, wenn die Pflanze bei Hitze immer weiter Wasser verdunstet?</p></details>
+    </div>
+
+    <div class="quiz" data-modul="4" data-id="q5" data-correct="b">
+      <p class="quiz-nr">Frage 5</p>
+      <p class="quiz-frage">Was transportiert das Leitungsgewebe?</p>
+      <div class="quiz-optionen">
+        <button class="quiz-option" data-opt="a" data-ff="Luft wird über die Spaltöffnungen ausgetauscht, nicht über das Leitungsgewebe.">Nur Luft</button>
+        <button class="quiz-option" data-opt="b" data-fr="Richtig! Es verbindet Wurzel und Blätter und transportiert in beide Richtungen.">Wasser, Mineralstoffe und Zucker</button>
+        <button class="quiz-option" data-opt="c" data-ff="Sauerstoff entsteht bei der Fotosynthese und verlässt das Blatt über die Spaltöffnungen.">Nur Sauerstoff</button>
+      </div>
+      <p class="quiz-feedback" aria-live="polite"></p>
+      <details class="quiz-tipp"><summary>Tipp</summary><p>Es verbindet Wurzel und Blätter – was muss zwischen beiden hin- und hertransportiert werden?</p></details>
+    </div>
+
+    <div class="quiz" data-modul="4" data-id="q6" data-correct="a">
+      <p class="quiz-nr">Frage 6</p>
+      <p class="quiz-frage">Warum liegt das Palisadengewebe direkt unter der oberen Epidermis?</p>
+      <div class="quiz-optionen">
+        <button class="quiz-option" data-opt="a" data-fr="Richtig! So bekommt es möglichst viel Licht für die Fotosynthese ab.">Damit es möglichst viel Licht abbekommt</button>
+        <button class="quiz-option" data-opt="b" data-ff="Mit Windschutz hat die Lage im Blatt nichts zu tun.">Damit es vor Wind geschützt ist</button>
+        <button class="quiz-option" data-opt="c" data-ff="Wasser wird eher in der Vakuole der Zellen gespeichert, nicht wegen der Lage im Blatt.">Damit es Wasser speichern kann</button>
+      </div>
+      <p class="quiz-feedback" aria-live="polite"></p>
+      <details class="quiz-tipp"><summary>Tipp</summary><p>Licht kommt von oben auf das Blatt.</p></details>
+    </div>
+  </div>
+
+  <div class="merksatz">
+    <span class="merksatz-label">Merksatz</span>
+    Das Blatt ist aus mehreren Gewebeschichten aufgebaut: Kutikula und Epidermis schützen, das Palisadengewebe betreibt die meiste Fotosynthese, das Schwammgewebe sorgt für Durchlüftung, die Spaltöffnungen regeln Gasaustausch und Verdunstung, das Leitungsgewebe transportiert Wasser, Mineralstoffe und Zucker.
+  </div>
+
+  <div class="weiter-nav">
+    <button class="zurueck-btn" data-geh-zu="modul3">← Modul 3</button>
+    <button class="weiter-btn" data-geh-zu="modul5">Weiter zu Modul 5 →</button>
+  </div>
+</section>
+
+<!-- MODUL 5 -->
+<section class="ansicht" data-ansicht="modul5">
+  <div class="modul-kopf" style="--mc:var(--m5);--mc-bg:var(--m5-bg);">
+    <span class="modul-kicker">Modul 5 von 5</span>
+    <h2>Alles im Überblick</h2>
+    <p>Eine kurze Wiederholung der wichtigsten Inhalte aus allen vier Modulen – keine Fragen, nur zum Nachlesen. Klicke auf die unterstrichenen Begriffe, wenn du zu einem Thema noch einmal ausführlicher nachschauen willst.</p>
+  </div>
+
+  <div class="block" style="--mc:var(--m1);--mc-bg:var(--m1-bg);">
+    <h3>1 · Ökosysteme</h3>
+    <ul class="stichpunkte">
+      <li>Ein <button class="inline-link" data-geh-zu="modul1">Ökosystem</button> besteht aus dem <button class="inline-link" data-geh-zu="modul1">Biotop</button>, dem unbelebten Lebensraum, und der <button class="inline-link" data-geh-zu="modul1">Biozönose</button>, der Gemeinschaft aller Lebewesen darin.</li>
+      <li><button class="inline-link" data-geh-zu="modul1">Abiotische Faktoren</button>: Wasser, Klima, Temperatur, Licht, Boden – unbelebt.</li>
+      <li><button class="inline-link" data-geh-zu="modul1">Biotische Faktoren</button>: Nahrung, Fressfeinde, Konkurrenz, Krankheitserreger – alles, was mit anderen Lebewesen zu tun hat.</li>
+      <li>Wald, Wiese und Wattenmeer sind drei ganz verschiedene Ökosysteme mit eigener Schichtung. Ohne Mähen wird aus einer Wiese mit der Zeit ein Wald.</li>
+    </ul>
+  </div>
+
+  <div class="block" style="--mc:var(--m2);--mc-bg:var(--m2-bg);">
+    <h3>2 · Nahrungsbeziehungen</h3>
+    <ul class="stichpunkte">
+      <li>Pflanzen sind <button class="inline-link" data-geh-zu="modul2">Produzenten</button>, weil sie ihre Nährstoffe selbst herstellen.</li>
+      <li>Tiere sind <button class="inline-link" data-geh-zu="modul2">Konsumenten</button> 1., 2. oder 3. Ordnung, je nachdem, ob sie Pflanzen oder andere Tiere fressen.</li>
+      <li>Eine <button class="inline-link" data-geh-zu="modul2">Nahrungskette</button> zeigt eine einzelne Abfolge, z. B. Eichenblatt → Eichenwicklerraupe → Kohlmeise → Sperber.</li>
+      <li>Ein <button class="inline-link" data-geh-zu="modul2">Nahrungsnetz</button> verbindet viele Nahrungsketten miteinander und macht ein Ökosystem dadurch stabiler.</li>
+    </ul>
+  </div>
+
+  <div class="block" style="--mc:var(--m3);--mc-bg:var(--m3-bg);">
+    <h3>3 · Fotosynthese</h3>
+    <ul class="stichpunkte">
+      <li>Grüne Pflanzen sind <button class="inline-link" data-geh-zu="modul3">autotroph</button>: Sie stellen ihre Nährstoffe selbst her. Tiere sind <button class="inline-link" data-geh-zu="modul3">heterotroph</button> und auf Nahrung angewiesen.</li>
+      <li>Wortgleichung der <button class="inline-link" data-geh-zu="modul3">Fotosynthese</button>: Wasser + Kohlenstoffdioxid ergeben mithilfe von Lichtenergie Glucose + Sauerstoff. Sie läuft in den Chloroplasten ab.</li>
+      <li>Auch Pflanzen betreiben <button class="inline-link" data-geh-zu="modul3">Zellatmung</button> in den Mitochondrien – das Gegenstück zur Fotosynthese.</li>
+    </ul>
+  </div>
+
+  <div class="block" style="--mc:var(--m4);--mc-bg:var(--m4-bg);">
+    <h3>4 · Blattaufbau</h3>
+    <ul class="stichpunkte">
+      <li><button class="inline-link" data-geh-zu="modul4">Kutikula</button> schützt das Blatt vor dem Austrocknen.</li>
+      <li><button class="inline-link" data-geh-zu="modul4">Palisadengewebe</button>: viele Chloroplasten, hier läuft der größte Teil der Fotosynthese ab.</li>
+      <li><button class="inline-link" data-geh-zu="modul4">Schwammgewebe</button> sorgt für die Durchlüftung des Blattes.</li>
+      <li><button class="inline-link" data-geh-zu="modul4">Spaltöffnungen</button> regeln Gasaustausch und Verdunstung und schließen sich bei großer Hitze.</li>
+      <li><button class="inline-link" data-geh-zu="modul4">Leitungsgewebe</button> transportiert Wasser, Mineralstoffe und Zucker zwischen Wurzel und Blatt.</li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <h3>So hängt alles zusammen</h3>
+    <p>Die Erde bietet mit Wasser, Atmosphäre und gemäßigten Temperaturen die Grundlage für <button class="inline-link" style="--mc:var(--m1);" data-geh-zu="modul1">Ökosysteme</button>. Darin brauchen alle Lebewesen Energie: Pflanzen gewinnen sie selbst durch die <button class="inline-link" style="--mc:var(--m3);" data-geh-zu="modul3">Fotosynthese</button> in ihren Blättern, vor allem im <button class="inline-link" style="--mc:var(--m4);" data-geh-zu="modul4">Palisadengewebe</button>. Tiere nehmen diese Energie über <button class="inline-link" style="--mc:var(--m2);" data-geh-zu="modul2">Nahrungsketten und Nahrungsnetze</button> auf. So hängt am Ende alles Leben im Wald – vom Eichenblatt bis zum Sperber – von der Sonnenenergie ab, die die Pflanzen einfangen.</p>
+  </div>
+
+  <div class="weiter-nav">
+    <button class="zurueck-btn" data-geh-zu="modul4">← Modul 4</button>
+    <button class="weiter-btn" data-geh-zu="start">Zur Übersicht →</button>
+  </div>
+  <div class="test-karte">
+    <strong>Geschafft!</strong>
+    <p style="margin:.4rem 0 0;">Wenn du magst, mach jetzt eine Pause – und wenn du bereit bist, geht es weiter mit dem Test zum Ausdrucken.</p>
+    <a href="test.html" target="_blank" rel="noopener">Zum Test (test.html) →</a>
+  </div>
+</section>
+
+<p class="fussnote" style="max-width:900px;margin:0 auto;padding:0 1.25rem 2rem;">
+  Texte und Abbildungen angelehnt an dein Biobuch (Klett, Biologie 8) sowie eure eigenen Arbeitsblätter und Hefteinträge.
+  <button class="zuruecksetzen">Fortschritt zurücksetzen</button>
+</p>
+
+<script>
+(function(){
+  var ANSICHTEN = Array.prototype.slice.call(document.querySelectorAll('.ansicht'));
+  var TABS = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+
+  function zeigeAnsicht(name, verlauf){
+    ANSICHTEN.forEach(function(a){ a.classList.toggle('aktiv', a.dataset.ansicht === name); });
+    TABS.forEach(function(t){ t.setAttribute('aria-selected', String(t.dataset.ziel === name)); });
+    window.scrollTo(0,0);
+    if (verlauf === 'ersetzen'){
+      history.replaceState({ansicht:name}, '', '#'+name);
+    } else if (verlauf !== 'keine'){
+      var aktuell = (location.hash||'').replace('#','');
+      if (aktuell !== name){ history.pushState({ansicht:name}, '', '#'+name); }
+    }
+  }
+
+  TABS.forEach(function(t){ t.addEventListener('click', function(){ zeigeAnsicht(t.dataset.ziel); }); });
+  document.querySelectorAll('[data-geh-zu]').forEach(function(btn){
+    btn.addEventListener('click', function(){ zeigeAnsicht(btn.dataset.gehZu); });
+  });
+
+  window.addEventListener('popstate', function(){
+    var hash = (location.hash||'').replace('#','');
+    var ziel = (hash && document.querySelector('.ansicht[data-ansicht="'+hash+'"]')) ? hash : 'start';
+    zeigeAnsicht(ziel, 'keine');
+  });
+
+  var startHash = (location.hash||'').replace('#','');
+  var zielBeimStart = (startHash && document.querySelector('.ansicht[data-ansicht="'+startHash+'"]')) ? startHash : 'start';
+  zeigeAnsicht(zielBeimStart, 'ersetzen');
+
+  var SPEICHER = 'jpBioFortschritt';
+  function ladeFortschritt(){
+    try { return JSON.parse(localStorage.getItem(SPEICHER)) || {}; } catch(e){ return {}; }
+  }
+  function speichereFortschritt(obj){
+    localStorage.setItem(SPEICHER, JSON.stringify(obj));
+  }
+  var fortschritt = ladeFortschritt();
+
+  function aktualisiereAnzeige(){
+    document.querySelectorAll('.modul-karte[data-modul]').forEach(function(karte){
+      var modul = karte.dataset.modul;
+      var quizzesInModul = document.querySelectorAll('.quiz[data-modul="'+modul+'"]').length;
+      var geloest = fortschritt[modul] ? fortschritt[modul].length : 0;
+      var status = karte.querySelector('.modul-karte-status');
+      status.textContent = (geloest >= quizzesInModul && quizzesInModul > 0) ? 'Geschafft – alle Fragen richtig ✓' : (geloest + ' von ' + quizzesInModul + ' Fragen richtig');
+      karte.classList.toggle('modul-fertig', geloest >= quizzesInModul && quizzesInModul > 0);
+    });
+    document.querySelectorAll('.tab[data-modul]').forEach(function(tab){
+      var modul = tab.dataset.modul;
+      var quizzesInModul = document.querySelectorAll('.quiz[data-modul="'+modul+'"]').length;
+      var geloest = fortschritt[modul] ? fortschritt[modul].length : 0;
+      var haken = tab.querySelector('.haken');
+      if (geloest >= quizzesInModul && quizzesInModul > 0){
+        if (!haken){ tab.insertAdjacentHTML('beforeend', ' <span class="haken">✓</span>'); }
+      } else if (haken){ haken.remove(); }
+    });
+    var module = ['1','2','3','4'];
+    var fertigeModule = module.filter(function(m){
+      var quizzesInModul = document.querySelectorAll('.quiz[data-modul="'+m+'"]').length;
+      var geloest = fortschritt[m] ? fortschritt[m].length : 0;
+      return quizzesInModul > 0 && geloest >= quizzesInModul;
+    }).length;
+    var fuellung = document.querySelector('.fortschritt-fuellung');
+    if (fuellung){ fuellung.style.width = (fertigeModule / module.length * 100) + '%'; }
+    var label = document.querySelector('.fortschritt-label');
+    if (label){ label.textContent = fertigeModule + ' von 4 Modulen geschafft'; }
+  }
+
+  function markiereGeloest(modul, id){
+    if (!fortschritt[modul]) fortschritt[modul] = [];
+    if (fortschritt[modul].indexOf(id) === -1) fortschritt[modul].push(id);
+    speichereFortschritt(fortschritt);
+    aktualisiereAnzeige();
+  }
+
+  document.querySelectorAll('.quiz').forEach(function(quiz){
+    var modul = quiz.dataset.modul;
+    var id = quiz.dataset.id;
+    var correct = quiz.dataset.correct.split(',').map(function(s){ return s.trim(); });
+    var buttons = Array.prototype.slice.call(quiz.querySelectorAll('.quiz-option'));
+    var feedback = quiz.querySelector('.quiz-feedback');
+    var tipp = quiz.querySelector('.quiz-tipp');
+    var versuche = 0;
+    var geloest = false;
+
+    if (fortschritt[modul] && fortschritt[modul].indexOf(id) !== -1){
+      geloest = true;
+      quiz.classList.add('quiz-geloest');
+      feedback.textContent = 'Schon richtig beantwortet.';
+      feedback.className = 'quiz-feedback feedback-richtig';
+    }
+
+    buttons.forEach(function(btn){
+      btn.addEventListener('click', function(){
+        if (geloest) return;
+        versuche++;
+        var istRichtig = correct.indexOf(btn.dataset.opt) !== -1;
+        buttons.forEach(function(b){ b.classList.remove('ist-richtig','ist-falsch'); });
+        if (istRichtig){
+          btn.classList.add('ist-richtig');
+          feedback.textContent = btn.dataset.fr || 'Richtig! Gut gemacht.';
+          feedback.className = 'quiz-feedback feedback-richtig';
+          geloest = true;
+          quiz.classList.add('quiz-geloest');
+          markiereGeloest(modul, id);
+        } else {
+          btn.classList.add('ist-falsch');
+          feedback.textContent = btn.dataset.ff || 'Noch nicht ganz richtig – versuch es noch einmal.';
+          feedback.className = 'quiz-feedback feedback-falsch';
+          if (versuche >= 2 && tipp){ tipp.setAttribute('open',''); }
+        }
+      });
+    });
+  });
+
+  aktualisiereAnzeige();
+
+  document.querySelectorAll('.zuruecksetzen').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      if (confirm('Wirklich den ganzen Fortschritt löschen?')){
+        localStorage.removeItem(SPEICHER);
+        location.reload();
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>
